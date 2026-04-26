@@ -23,7 +23,9 @@ public class Calculadora
         if (IMC < 18.5) return "Abaixo do peso";
         if (IMC < 25) return "Peso normal";
         if (IMC < 30) return "Sobrepeso";
-        return "Obesidade";
+        if (IMC < 35) return "Obesidade I";
+        if (IMC < 40) return "Obesidade II (Severa)";
+        return "Obesidade III (Mórbida)";
     }
 
     // Exibir a Classificação do IMC (Índice de Massa Corporal) pela classe Pessoa | Atalho
@@ -100,22 +102,22 @@ public class Calculadora
     }
 
     // Calcular o ETA (Efeito Térmico dos Alimentos)
-    public double CalcularETA(Pessoa pessoa)
+    public double CalcularETA(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor)
     {
-        double GER = CalcularGER(pessoa); /* Repouso */
-        double GAF = CalcularGAF(pessoa); /* Atividade + NEAT */
+        double GER = CalcularGER(pessoa, formula); /* Repouso */
+        double GAF = CalcularGAF(pessoa, formula); /* Atividade + NEAT */
 
         double ETA = (GER + GAF) * 0.10; /* Ou dividir por 10 | Obter 10% */
         return Math.Round(ETA, 0);
     }
 
     // Calcular o GAF (Gasto de Atividade Física)
-    public double CalcularGAF(Pessoa pessoa) /* O NEAT deve ser levado em conta também na hora de escolher o fator de atividade */
+    public double CalcularGAF(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor) /* O NEAT deve ser levado em conta também na hora de escolher o fator de atividade */
     {
         if (pessoa.FatorAtividade < 1) return 0; /* Validação de dados | Fator de atividade não pode ser menor que 1 */ /* Deixei como anotação, deve ser removido e feito a validação na aplicação Web */
 
-        double GER = CalcularGER(pessoa);
-        
+        double GER = CalcularGER(pessoa, formula);
+
         double GAF = GER * (pessoa.FatorAtividade - 1); /* Outra forma de calcular é: pessoa.FatorAtividade * GER - GER */
         return Math.Round(GAF, 0);
     }
@@ -128,16 +130,18 @@ public class Calculadora
     }
 
     // Calcular o GET (Gasto Energético Total)
-    public double CalcularGET(Pessoa pessoa)
+    public double CalcularGET(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor)
     {
-        double GER = CalcularGER(pessoa);
-        double ETA = CalcularETA(pessoa);
-        double GAF = CalcularGAF(pessoa);
+        double GER = CalcularGER(pessoa, formula);
+        double ETA = CalcularETA(pessoa, formula);
+        double GAF = CalcularGAF(pessoa, formula);
         double NEAT = CalcularNEAT();
 
         double GET = GER + ETA + GAF + NEAT;
         return Math.Round(GET, 0);
     }
+
+    // Solucionar Double Counting
 }
 
 

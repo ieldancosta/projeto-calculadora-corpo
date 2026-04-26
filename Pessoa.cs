@@ -53,7 +53,7 @@ public class Pessoa
     public override string ToString() /* Método que permite imprimir a classe direto */
     {
         // Caso a porcentagem de gordura tenha sido informada, será exibida junto com a massa livre de gordura
-        if (PercentualGordura.HasValue) return $"Nome: {Nome}\nIdade: {Idade} anos\nSexo: {Sexo}\nPeso: {Peso} Kg\nAltura: {Altura} cm\nFator de Atividade: {FatorAtividade}\nPercentual de gordura: {PercentualGordura}\nMassa livre de gordura: {MLG:F1} Kg";
+        if (PercentualGordura.HasValue) return $"Nome: {Nome}\nIdade: {Idade} anos\nSexo: {Sexo}\nPeso: {Peso:F1} Kg\nAltura: {Altura} cm\nFator de Atividade: {FatorAtividade}\nPercentual de gordura: {PercentualGordura}\nMassa livre de gordura: {MLG:F2} Kg";
 
         // Informações básicas que sempre existem
         return $"Nome: {Nome}\nIdade: {Idade} anos\nSexo: {Sexo}\nPeso: {Peso} Kg\nAltura: {Altura} cm\nFator de Atividade: {FatorAtividade}";
