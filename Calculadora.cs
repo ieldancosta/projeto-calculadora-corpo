@@ -52,22 +52,22 @@ public class Calculadora
     }
 
     // Calcular GER - Fórmula Mifflin-ST Jeor
-    private double CalcularMifflinStJeor(Pessoa pessoa) /* Mais segura e recomendada */
+    private double CalcularMifflinStJeor(Pessoa pessoa) /* Mais segura e recomendada */ /* Padrão selecionada */
     {
         double resultadoBase = (10 * pessoa.Peso) + (6.25 * pessoa.Altura) - (5 * pessoa.Idade);
         return pessoa.Sexo == "Masculino" ? resultadoBase + 5 : resultadoBase - 161; /* Separação de sexos */
     }
 
     // Calcular GER - Fórmula Harris Benedict
-    private double CalcularHarrisBenedict(Pessoa pessoa) /* Recomendado para IMC < 30 */
+    private double CalcularHarrisBenedict(Pessoa pessoa) /* Recomendado para IMC < 30 */ /* Foi definido os valores não arredondados para maior precisão, de 1919 */
     {
         if (pessoa.Sexo == "Masculino") /* Se for do sexo masculino */
         {
-            return 66 + (13.8 * pessoa.Peso) + (5.0 * pessoa.Altura) - (6.8 * pessoa.Idade);
+            return 66.5 /* 1919 | 1994: 66 */ + (13.75 /* 1919 | 1994: 13.8 */ * pessoa.Peso) + (5.003 /* 1919 | 1994: 5.0 */ * pessoa.Altura) - (6.75 /* 1919 | 1994 - Arredondamento: 6.8 */ * pessoa.Idade);
         }
         else /* Se for do sexo feminino */
         {
-            return 655 + (9.6 * pessoa.Peso) + (1.9 * pessoa.Altura) - (4.7 * pessoa.Idade);
+            return 655.1 /* 1919 | 1994: 655 */ + (9.563 /* 1919 | 1994: 9.6 */ * pessoa.Peso) + (1.850 /* 1919 | 1994: 1.8 */ * pessoa.Altura) - (4.676 /* 1919 | 1994 - Arredondamento: 5.0 */ * pessoa.Idade);
         }
     }
 
@@ -90,7 +90,7 @@ public class Calculadora
     }
 
     // Calcular GER - Fórmula Tinsley MLG
-    private double CalcularTinsleyMLG(Pessoa pessoa) /* Fisiculturistas; físico atlético (mais utilizada) */
+    private double CalcularTinsleyMLG(Pessoa pessoa) /* Fisiculturistas; físico atlético (mais utilizada nesse cenário) */
     {
         if (pessoa.MLG == null)
         {
@@ -104,40 +104,39 @@ public class Calculadora
     // Calcular o ETA (Efeito Térmico dos Alimentos)
     public double CalcularETA(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor)
     {
-        double GER = CalcularGER(pessoa, formula); /* Repouso */
-        double GAF = CalcularGAF(pessoa, formula); /* Atividade + NEAT */
+        double GET = CalcularGET(pessoa, formula); /* Atividade + NEAT + ETA */
 
-        double ETA = (GER + GAF) * 0.10; /* Ou dividir por 10 | Obter 10% */
+        double ETA = GET * 0.10; /* Ou dividir por 10 | Obter 10% */ /* Outra forma: ETA = (GER + GAF) * 0.10;  | ETA = (GER * Fator) * 0.10; */
         return Math.Round(ETA, 0);
     }
 
     // Calcular o GAF (Gasto de Atividade Física)
-    public double CalcularGAF(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor) /* O NEAT deve ser levado em conta também na hora de escolher o fator de atividade */
+    public double CalcularGAF(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor) /* Pode ser chamado de AEE também, o que envolve, na nomenclatura, tanto o exercício (intencional/estruturado/repetitivo) quanto a atividade (não estruturado); O bloco de movimento */ /* O NEAT deve ser levado em conta também na hora de escolher o fator de atividade */
     {
-        if (pessoa.FatorAtividade < 1) return 0; /* Validação de dados | Fator de atividade não pode ser menor que 1 */ /* Deixei como anotação, deve ser removido e feito a validação na aplicação Web */
+        if (pessoa.FatorAtividade < 1.2) return 0; /* Validação de dados | Fator de atividade não pode ser menor que 1 */ /* Deixei como anotação, deve ser removido e feito a validação na aplicação Web */
 
         double GER = CalcularGER(pessoa, formula);
+        double ETA = CalcularETA(pessoa, formula);
 
-        double GAF = GER * (pessoa.FatorAtividade - 1); /* Outra forma de calcular é: pessoa.FatorAtividade * GER - GER */
-        return Math.Round(GAF, 0);
+        double GAF = GER * (pessoa.FatorAtividade - 1) - ETA; /* Outra forma de calcular é: pessoa.FatorAtividade * GER - GER | Outra forma: GAF = GET - GER - ETA */ /* GAF já inclui NEAT e ETA */
+        return Math.Round(GAF, 0); /* GAF = EAT + NEAT -> EAT (Exercise Activity Thermogenesis) é o exercício intencional/estruturado; O NEAT (Non-Exercise) é a atividade não estruturada  */
     }
 
     // Calcular o NEAT (Termogênese Não Relacionada ao Exercício Físico)
     public double CalcularNEAT() /* Como o NEAT já está sendo levado em consideração no cálculo do GAF, não é necessário */ /* Futuramente, penso em remover este método */
     {
-        double NEAT = 0;
+        double NEAT = 0; /* É algo muito difícil de calcular (principalmente pois depende!), e acredito que nem seja recomendado por não interferir em nada ter esse dado isolado | Por hora, não irei calcular e acho que não iremos usar */
         return NEAT;
     }
 
     // Calcular o GET (Gasto Energético Total)
     public double CalcularGET(Pessoa pessoa, TipoFormula formula = TipoFormula.MifflinStJeor)
     {
-        double GER = CalcularGER(pessoa, formula);
-        double ETA = CalcularETA(pessoa, formula);
-        double GAF = CalcularGAF(pessoa, formula);
-        double NEAT = CalcularNEAT();
+        if (pessoa.FatorAtividade < 1.2) return 0; /* Validação de dados | Fator de atividade não pode ser menor que 1 */ /* Deixei como anotação, deve ser removido e feito a validação na aplicação Web */
 
-        double GET = GER + ETA + GAF + NEAT;
+        double GER = CalcularGER(pessoa, formula);
+
+        double GET = GER * pessoa.FatorAtividade; /* Fórmula universal: GET = GER + ETA + GAF + NEAT */ /* Outra forma: GET = GER + GAF */
         return Math.Round(GET, 0);
     }
 

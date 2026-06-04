@@ -61,7 +61,7 @@ public class GeradorDeRelatorio
         sb.AppendLine($"   Fator de Atividade: {pessoa.FatorAtividade}");
         sb.AppendLine();
         sb.AppendLine($"   Gasto Energético em Repouso (GER ou TMB): {GER} kcal p/dia");
-        sb.AppendLine($"   Gasto de Atividade Física (GAF): {GAF} kcal p/dia");
+        sb.AppendLine($"   Gasto com Atividade Física (GAF): {GAF} kcal p/dia");
         sb.AppendLine($"   Efeito Térmico dos Alimentos (ETA): {ETA} kcal p/dia");
         sb.AppendLine("..........................................");
         sb.AppendLine($"   GASTO ENERGÉTICO TOTAL (GET): {GET} kcal p/dia");
@@ -104,7 +104,7 @@ public class GeradorDeRelatorio
         sb.AppendLine($"   Fator de Atividade: {pessoa.FatorAtividade}");
         sb.AppendLine();
         sb.AppendLine($"   Gasto Energético em Repouso (GER ou TMB): {GER} kcal p/dia");
-        sb.AppendLine($"   Gasto de Atividade Física (GAF): {GAF} kcal p/dia");
+        sb.AppendLine($"   Gasto com Atividade Física (GAF): {GAF} kcal p/dia");
         sb.AppendLine($"   Efeito Térmico dos Alimentos (ETA): {ETA} kcal p/dia");
         sb.AppendLine("..........................................");
         sb.AppendLine($"   GASTO ENERGÉTICO TOTAL (GET): {GET} kcal p/dia");
@@ -114,8 +114,8 @@ public class GeradorDeRelatorio
         return sb.ToString();
     }
 
-    // Mostrar o valor de calorias semanal
+    // Mostrar o valor de calorias semanal também
     // Mostrar o déficit diário e semanal
     // Mostrar quantidade de macronutrientes
-    // Mostrar refeições sugeridas para atingir (e personalizado)
+    // Mostrar refeições sugeridas para atingir (de forma personalizado)
 }
