@@ -7,13 +7,13 @@ public class Pessoa
 {
     // Propriedades
     public string Nome { get; set; } 
-    public int Idade { get; set; } /* Anos */
+    public int Idade { get; set; } /* anos */
     public string Sexo { get; set; }
-    public double Peso { get; set; } /* Kg */
+    public double Peso { get; set; } /* kg */
     public double Altura { get; set; } /* cm */
     public double FatorAtividade { get; set; } /* Não só o GAF, mas também o NEAT deve ser levado em conta na hora de escolher o fator de atividade */
     public double? PercentualGordura { get; set; } /* % */
-    public double? MLG /* Kg | Massa Livre de Gordura */
+    public double? MLG /* kg | Massa Livre de Gordura */
     {
         get 
         {
@@ -53,9 +53,25 @@ public class Pessoa
     public override string ToString() /* Método que permite imprimir a classe direto */
     {
         // Caso a porcentagem de gordura tenha sido informada, será exibida junto com a massa livre de gordura
-        if (PercentualGordura.HasValue) return $"Nome: {Nome}\nIdade: {Idade} anos\nSexo: {Sexo}\nPeso: {Peso:F1} Kg\nAltura: {Altura} cm\nFator de Atividade: {FatorAtividade}\nPercentual de gordura: {PercentualGordura}\nMassa livre de gordura: {MLG:F2} Kg";
+        if (PercentualGordura.HasValue) return $"""
+            Nome: {Nome}
+            Idade: {Idade} anos
+            Sexo: {Sexo}
+            Peso: {Peso:F1} kg
+            Altura: {Altura} cm
+            Fator de Atividade: {FatorAtividade}
+            Percentual de gordura: {PercentualGordura}
+            Massa livre de gordura: {MLG:F2} kg
+            """;
 
         // Informações básicas que sempre existem
-        return $"Nome: {Nome}\nIdade: {Idade} anos\nSexo: {Sexo}\nPeso: {Peso} Kg\nAltura: {Altura} cm\nFator de Atividade: {FatorAtividade}";
+        return $"""
+            Nome: {Nome}
+            Idade: {Idade} anos
+            Sexo: {Sexo}
+            Peso: {Peso} kg
+            Altura: {Altura} cm
+            Fator de Atividade: {FatorAtividade}
+            """;
     }
 }
