@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { supabase } from '../services/supabase'; // Importando o nosso cliente configurado
+// Importações / Dependências
+import { useState, useEffect } from 'react';
+import { supabase } from '../services/supabase'; /* Importando o nosso cliente configurado */
+import { useNavigate, Link } from 'react-router-dom';
 
 
 /* 1. O primeiro passo é bloquear o recarregamento da página */
@@ -15,10 +17,42 @@ retorna um erro, e os dados nulo. Se for um sucesso, o erro vai retornar nulo e 
 
 
 export function LoginPage() {
+  const navigate = useNavigate(); /* Instancia o controlador de tráfego */
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(false);
+
+  // --- CHECAGEM INICIAL DE SESSÃO ---
+  useEffect(() => {
+    const verificarSessaoExistente = async () => {
+      // O getSession automaticamente lê a URL se o usuário estiver voltando do Google
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session) {
+        setCarregando(true);
+        try {
+          const { data: perfil, error: perfilError } = await supabase
+            .from('perfis')
+            .select('id')
+            .eq('id', session.user.id)
+            .single();
+
+          if (perfilError || !perfil) {
+            navigate('/onboarding');
+          } else {
+            navigate('/feed');
+          }
+        } catch (err) {
+          console.error("Erro ao verificar perfil:", err);
+        } finally {
+          setCarregando(false);
+        }
+      }
+    };
+
+    verificarSessaoExistente();
+  }, [navigate]);
 
   // Função para Login com E-mail e Senha
   const handleLogin = async (e) => {
@@ -46,11 +80,22 @@ export function LoginPage() {
     if (error) {
       setErro(error.message);
     } else {
-      alert(`Bem-vindo(a)! Login realizado com sucesso.`);
-      console.log('Dados do usuário:', data.user);
-      // Aqui entrará o redirecionamento para o painel principal no futuro
+      // O login deu certo! Agora checamos se ele já preencheu o quiz alguma vez
+      const { data: perfil, error: perfilError } = await supabase
+        .from('perfis')
+        .select('id')
+        .eq('id', data.user.id)
+        .single(); // Tenta pegar uma linha única
+
+      if (perfilError || !perfil) {
+        // Se deu erro ou não achou linha, significa que é o primeiro acesso
+        navigate('/onboarding');
+      } else {
+        // Se o perfil existe, vai direto para o painel/fórum principal
+        navigate('/feed'); // Talvez eu mude futuramente essa rota
+      }
     }
-    
+
     setCarregando(false);
   };
 
@@ -98,18 +143,19 @@ export function LoginPage() {
     marginTop: '10px'
   };
 
+
   // Retorno para o usuário --- HTML
   return (
     <div style={containerStyle}>
       <form onSubmit={handleLogin} style={formStyle}>
         <h2 style={{ textAlign: 'center', margin: '0 0 10px 0', color: '#333' }}>Entrar no Sistema</h2>
-        
+
         <div>
           {/* <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>E-mail</label> */}
-          <input 
-            type="email" 
+          <input
+            type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} 
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu e-mail"
             style={inputStyle}
             disabled={carregando}
@@ -118,10 +164,10 @@ export function LoginPage() {
 
         <div>
           {/* <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Senha</label> */}
-          <input 
-            type="password" 
+          <input
+            type="password"
             value={senha}
-            onChange={(e) => setSenha(e.target.value)} 
+            onChange={(e) => setSenha(e.target.value)}
             placeholder="Digite sua senha"
             style={inputStyle}
             disabled={carregando}
@@ -143,6 +189,10 @@ export function LoginPage() {
         <button type="button" onClick={handleGoogleLogin} style={googleButtonStyle}>
           Entrar com Google
         </button>
+
+        <div style={{ textAlign: 'center', marginTop: '10px', fontSize: '13px' }}>
+          Não tem uma conta? <Link to="/cadastro" style={{ color: '#007bff', textDecoration: 'none', fontWeight: 'bold' }}>Cadastre-se</Link>
+        </div>
       </form>
     </div>
   );

@@ -16,6 +16,17 @@ builder.Services.AddControllers().AddJsonOptions(options => /* Habilita o uso de
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen(); /* Habilita o Swagger (Interface gráfica para testar a API)  */
 
+// Configuração de CORS (A Lista VIP)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirFrontendReact", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // A origem exata do seu React
+              .AllowAnyHeader()  // Permite qualquer cabeçalho (como Content-Type)
+              .AllowAnyMethod(); // Permite POST, GET, OPTIONS, etc.
+    });
+});
+
 // 3. Constrói a aplicação de fato
 var app = builder.Build();
 
@@ -26,8 +37,12 @@ app.UseSwaggerUI();
 // Redireciona tudo para HTTPS por segurança
 app.UseHttpsRedirection();
 
+// Ativar o CORS (deve vir ANTES do MapControllers e do UseAuthorization)
+app.UseCors("PermitirFrontendReact");
+
 // Mapeia os seus Controllers para que a internet consiga achá-los
 app.MapControllers();
+
 
 // 5. Abre as portas do restaurante e fica escutando eternamente!
 app.Run(); /* Caso queira mudar a porta, pode passar diretamente em: app.Run("http://localhost:8080"); */

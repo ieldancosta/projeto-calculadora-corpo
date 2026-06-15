@@ -1,6 +1,6 @@
 # Projeto | Body Calculator (Calculadora Nutricional e Metabólica)
 
-Projeto da faculdade desenvolvido para as disciplinas de Sistemas Distribuídos, Frontend e Backend.
+Projeto MVP da faculdade desenvolvido para as disciplinas de Sistemas Distribuídos, Frontend e Backend.
 
 O sistema consiste em uma calculadora de saúde avançada que realiza:
 - **Cálculo do Metabolismo Basal e Gasto Energético Total (GET)** utilizando fórmulas científicas (Mifflin-St Jeor, Harris-Benedict, etc.).

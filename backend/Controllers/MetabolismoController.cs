@@ -18,37 +18,48 @@ public class MetabolismoController : ControllerBase
     [HttpPost("calcular")] 
     public ActionResult<MetabolismoResponse> Calcular([FromBody] MetabolismoRequest request) /* O FromBody diz para procurar os dados dentro do corpo da requisição HTTP */
     {
-        // 1. Mapeamento (De DTO para Model)
-
-        /* O cliente mandou o pedido (request). Agora montamos a nossa entidade oficial do sistema. */
-        Pessoa pessoa;
-        
-        /* Assim como em Program.cs, vamos carregar a classe Pessoa com os dados recebidos do Frontend */
-        if (request.PercentualGordura.HasValue)
+        try
         {
-            // Usa o construtor 2 (com gordura)
-            pessoa = new Pessoa(request.Nome, request.Idade, request.Sexo, request.Peso, request.Altura, request.FatorAtividade, request.PercentualGordura.Value);
+            // 1. Mapeamento (De DTO para Model)
+
+            /* O cliente mandou o pedido (request). Agora montamos a nossa entidade oficial do sistema. */
+            Pessoa pessoa;
+            
+            /* Assim como em Program.cs, vamos carregar a classe Pessoa com os dados recebidos do Frontend */
+            if (request.PercentualGordura.HasValue)
+            {
+                // Usa o construtor 2 (com gordura)
+                pessoa = new Pessoa(request.Nome, request.Idade, request.Sexo, request.Peso, request.Altura, request.FatorAtividade, request.PercentualGordura.Value);
+            }
+            else
+            {
+                // Usa o construtor 1 (sem gordura)
+                pessoa = new Pessoa(request.Nome, request.Idade, request.Sexo, request.Peso, request.Altura, request.FatorAtividade);
+            }
+
+
+            // 2. Processamento (A Cozinha)
+
+            /* Passamos a entidade limpa e as regras para o seu motor matemático */
+            MetabolismoResponse resposta = CalculadoraMetabolismo.CalcularMetabolismo(
+                pessoa, 
+                request.ObjetivoFisico, 
+                request.FormulaUsada
+            );
+
+
+            // 3. Resposta (O Prato Pronto)
+
+            /* Retorna o código HTTP 200 (OK) embrulhando o DTO de resposta */
+            return Ok(resposta);
         }
-        else
+        catch (ArgumentException ex)
         {
-            // Usa o construtor 1 (sem gordura)
-            pessoa = new Pessoa(request.Nome, request.Idade, request.Sexo, request.Peso, request.Altura, request.FatorAtividade);
+            return BadRequest(new { erro = ex.Message });
         }
-
-
-        // 2. Processamento (A Cozinha)
-
-        /* Passamos a entidade limpa e as regras para o seu motor matemático */
-        MetabolismoResponse resposta = CalculadoraMetabolismo.CalcularMetabolismo(
-            pessoa, 
-            request.ObjetivoFisico, 
-            request.FormulaUsada
-        );
-
-
-        // 3. Resposta (O Prato Pronto)
-
-        /* Retorna o código HTTP 200 (OK) embrulhando o DTO de resposta */
-        return Ok(resposta);
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { erro = ex.Message });
+        }
     }
 }
