@@ -1,3 +1,12 @@
+// Importações / Dependências
+using BodyCalculator.Services; /* Permite enxergar os Services */
+using BodyCalculator.Enums; /* Permite enxergar as Enums */
+
+
+// Namespace
+namespace BodyCalculator.DTOs.Responses;
+
+
 // Classe
 public class MetabolismoResponse /* Classe de Transferência - DTO, Data Transfer Object | Baseado no fluxo de requisição HTTP, representa a response (resposta) de uma request (requisição) que o servidor vai devolver para o usuário */
 {
@@ -11,8 +20,6 @@ public class MetabolismoResponse /* Classe de Transferência - DTO, Data Transfe
     public double CaloriasAlvo { get; set; } /* kcal */
     public ObjetivoFisico ObjetivoFisico { get; set; } /* string */
     
-    
-    // adicionar as novas no tostring
 
     // Métodos
     public override string ToString() /* Método que permite imprimir a classe direto */

@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5000, // Porta
+    port: 5173, // Define explicitamente a porta padrão do Vite | Pode ser mudado para a porta que quiser
   }
 })

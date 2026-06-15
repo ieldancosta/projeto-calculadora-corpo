@@ -1,5 +1,12 @@
-// Namespaces
-using System;
+// Importações / Dependências
+using System.Text;
+using BodyCalculator.Models; /* Permite enxergar a classe Pessoa */
+using BodyCalculator.DTOs.Responses; /* Permite enxergar as Responses */
+using BodyCalculator.Enums; /* Permite enxergar as Enums */
+
+
+// Namespace
+namespace BodyCalculator.Services;
 
 
 // Classe
@@ -16,7 +23,9 @@ public static class CalculadoraMacronutrientes
     {
         double percentualGordura = 0.15; /* Valor padrão de segurança | O percentual na qual vamos pegar do GET vai ser fixo, de 15% | Calculamos a gordura pegando uma % da ingestão total do usuário */
         
-        /* Talvez futuramente estudar sobre a quantidade de proteína em diferentes objetivos e cenários, talvez até analisar percentual de gordura! Para futuras melhorias */
+        /* Talvez futuramente estudar sobre a quantidade de proteína em diferentes objetivos e 
+           cenários, talvez até analisar percentual de gordura! Para futuras melhorias. 
+           Tem informações interessantes em "Informações para Conhecimento" */
         double proteinaGramaPorKg = objetivo switch /* Nova forma de fazer o switch */
         {
             ObjetivoFisico.Emagrecimento => 2.0, /* 2,3 até 3,1 g por Kg */

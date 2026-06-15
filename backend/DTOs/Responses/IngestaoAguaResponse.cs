@@ -1,3 +1,7 @@
+// Namespace
+namespace BodyCalculator.DTOs.Responses;
+
+
 // Classe
 public class IngestaoAguaResponse /* Classe de Transferência - DTO, Data Transfer Object | Baseado no fluxo de requisição HTTP, representa a response (resposta) de uma request (requisição) que o servidor vai devolver para o usuário */
 {

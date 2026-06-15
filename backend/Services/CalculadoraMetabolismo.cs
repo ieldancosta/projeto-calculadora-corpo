@@ -1,5 +1,12 @@
-// Namespaces
-using System;
+// Importações / Dependências
+using System.Text;
+using BodyCalculator.Models; /* Permite enxergar a classe Pessoa */
+using BodyCalculator.DTOs.Responses; /* Permite enxergar as Responses */
+using BodyCalculator.Enums; /* Permite enxergar as Enums */
+
+
+// Namespace
+namespace BodyCalculator.Services;
 
 
 // Classe
@@ -87,7 +94,7 @@ public class CalculadoraMetabolismo /* Antiga CalculadoraMetabolica, o início d
 
     private static double CalcularGET(Pessoa pessoa, double GER)
     {
-        if (pessoa.FatorAtividade < 1.2) return 0; /* Validação de dados | Fator de atividade não pode ser menor que 1 */ /* Deixei como anotação, deve ser removido e feito a validação na aplicação Web */
+        if (pessoa.FatorAtividade < 1.2) throw new ArgumentException("Fator de atividade inválido. Deve conter um valor maior que 1,1."); /* Validação de dados | Fator de atividade não pode ser menor que 1 */ /* Defesa em profundidade */
 
         double GET = GER * pessoa.FatorAtividade; /* Fórmula universal: GET = GER + ETA + GAF + NEAT */ /* Outra forma: GET = GER + GAF */
         return GET; /* Deixamos para arrendondar no retorno para o DTO */
@@ -112,7 +119,7 @@ public class CalculadoraMetabolismo /* Antiga CalculadoraMetabolica, o início d
     // Calcular o GAF (Gasto de Atividade Física)
     private static double CalcularGAF(Pessoa pessoa, double GER, double ETA) /* Pode ser chamado de AEE também, o que envolve, na nomenclatura, tanto o exercício (intencional/estruturado/repetitivo) quanto a atividade (não estruturado); O bloco de movimento */ /* O NEAT deve ser levado em conta também na hora de escolher o fator de atividade */
     {
-        if (pessoa.FatorAtividade < 1.2) return 0; /* Validação de dados | Fator de atividade não pode ser menor ou igual a 1 (atualização: pelo menos 1.2) */ /* Deixei como anotação, deve ser removido e feito a validação na aplicação Web */
+        if (pessoa.FatorAtividade < 1.2) throw new ArgumentException("Fator de atividade inválido. Deve conter um valor maior que 1,1."); /* Validação de dados | Fator de atividade não pode ser menor ou igual a 1 (atualização: pelo menos 1.2) */ /* Defesa em profundidade */
 
         double GAF = GER * (pessoa.FatorAtividade - 1) - ETA; /* Outra forma de calcular é: pessoa.FatorAtividade * GER - GER | Outra forma: GAF = GET - GER - ETA */ /* GAF já inclui NEAT e ETA */
         return GAF; /* GAF = EAT + NEAT -> EAT (Exercise Activity Thermogenesis) é o exercício intencional/estruturado; O NEAT (Non-Exercise) é a atividade não estruturada */  /* Deixamos para arrendondar no retorno para o DTO */
@@ -219,21 +226,3 @@ public class CalculadoraMetabolismo /* Antiga CalculadoraMetabolica, o início d
     }
 }
 
-
-// Enumeração para os Tipos de Fórmula - GER
-public enum TipoFormula
-{
-    MifflinStJeor,
-    HarrisBenedict,
-    Cunningham,
-    TinsleyP,
-    TinsleyMLG
-}
-
-// Enumeração para os Tipos de Objetivo Físico
-public enum ObjetivoFisico
-{
-    Emagrecimento,
-    Manutencao,
-    GanhoDeMassa
-}

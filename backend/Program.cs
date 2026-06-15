@@ -1,37 +1,33 @@
 ﻿// Namespaces
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
 
 
-// Classe
-class Program
-{
-    static void Main(string[] args)
+// 1. O "Builder" é o construtor do seu restaurante (Servidor)
+var builder = WebApplication.CreateBuilder(args);
+
+// 2. Adicionando os serviços (Contratando os garçons e o cardápio visual)
+builder.Services.AddControllers().AddJsonOptions(options => /* Habilita o uso de Controllers */
     {
-        // Instâncias
+        // Ensina a API a ler e devolver Enums como Strings em vez de números
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+builder.Services.AddEndpointsApiExplorer(); 
+builder.Services.AddSwaggerGen(); /* Habilita o Swagger (Interface gráfica para testar a API)  */
 
-        // 1. O "Front-end" envia os dados da Pessoa
-        /* Nome (nome de usuário) | Idade | Sexo | Peso | Altura | Fator de Atividade | Percentual de Gordura */
-        Pessoa daniel = new Pessoa("Daniel", 20, "Masculino", 71, 176, 1.5, 8.83); 
-        Pessoa amigao = new Pessoa("Amigo de Testes", 30, "Feminino", 90, 167, 1.4);
-        Pessoa maclopes = new Pessoa("Meiry", 49, "Feminino", 68, 160, 1.5);
-        Pessoa andre = new Pessoa("André", 55, "Masculino", 98, 184, 1.35);
+// 3. Constrói a aplicação de fato
+var app = builder.Build();
 
-        // 2. O Backend chama as calculadoras estáticas e gera as DTOs (Caixas de dados)
-        MetabolismoResponse respostaMetabolismo = CalculadoraMetabolismo.CalcularMetabolismo(andre, ObjetivoFisico.Emagrecimento);
-        MacronutrientesResponse respostaMacronutrientes = CalculadoraMacronutrientes.CalcularMacronutrientes(andre, respostaMetabolismo.CaloriasAlvo, respostaMetabolismo.ObjetivoFisico);
-        IngestaoAguaResponse respostaAgua = CalculadoraIngestaoAgua.CalcularIngestaoDiaria(andre);
+// 4. Configura o "Salão" (Pipeline HTTP)
+app.UseSwagger();
+app.UseSwaggerUI();
 
-        // 3. O Gerador de Relatório recebe as caixas (DTOs) prontas e formata a interface de texto
-        string relatorioFinal = GeradorRelatorio.ImprimirCompleto(andre, respostaMetabolismo, respostaMacronutrientes, respostaAgua);
-        Console.WriteLine(relatorioFinal);
+// Redireciona tudo para HTTPS por segurança
+app.UseHttpsRedirection();
 
-        // Exibição das DTO utilizando do método ToString
-        // Console.WriteLine(daniel);
-        // System.Console.WriteLine();
-        // Console.WriteLine(respostaMetabolismo);
-        // System.Console.WriteLine();
-        // Console.WriteLine(respostaMacronutrientes);
-        // System.Console.WriteLine();
-        // Console.WriteLine(respostaAgua);   
-    }
-}
+// Mapeia os seus Controllers para que a internet consiga achá-los
+app.MapControllers();
+
+// 5. Abre as portas do restaurante e fica escutando eternamente!
+app.Run(); /* Caso queira mudar a porta, pode passar diretamente em: app.Run("http://localhost:8080"); */

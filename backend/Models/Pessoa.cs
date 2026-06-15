@@ -1,17 +1,22 @@
-// Namespaces
+// Importações / Dependências
 using System;
+using System.Diagnostics.CodeAnalysis;
+
+
+// Namespace
+namespace BodyCalculator.Models;
 
 
 // Classe
 public class Pessoa
 {
     // Propriedades
-    public string Nome { get; set; } 
+    public required string Nome { get; set; }  /* Texto/String */
     public int Idade { get; set; } /* anos */
-    public string Sexo { get; set; }
+    public required string Sexo { get; set; } /* Texto/String */
     public double Peso { get; set; } /* kg */
     public double Altura { get; set; } /* cm */
-    public double FatorAtividade { get; set; } /* Não só o GAF, mas também o NEAT deve ser levado em conta na hora de escolher o fator de atividade */
+    public double FatorAtividade { get; set; } /* Valor independente */ /* Não só o GAF, mas também o NEAT deve ser levado em conta na hora de escolher o fator de atividade */
     public double? PercentualGordura { get; set; } /* % */
     public double? MLG /* kg | Massa Livre de Gordura */
     {
@@ -26,6 +31,7 @@ public class Pessoa
     // Construtores
 
     // Construtor 1 | Sem informar o percentual de gordura
+    [SetsRequiredMembers]
     public Pessoa(string nome, int idade, string sexo, double peso, double altura, double fatorAtividade)
     {
         this.Nome = nome;
@@ -37,6 +43,7 @@ public class Pessoa
     }
 
     // Construtor 2 | Informando o percentual de gordura
+    [SetsRequiredMembers]
     public Pessoa(string nome, int idade, string sexo, double peso, double altura, double fatorAtividade, double percentualGordura)
     {
         this.Nome = nome;

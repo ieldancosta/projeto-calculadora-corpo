@@ -1,5 +1,11 @@
-// Namespaces
-using System;
+// Importações / Dependências
+using System.Text;
+using BodyCalculator.Models; /* Permite enxergar a classe Pessoa */
+using BodyCalculator.DTOs.Responses; /* Permite enxergar as Responses */
+
+
+// Namespace
+namespace BodyCalculator.Services;
 
 
 // Classe
@@ -8,7 +14,7 @@ public static class CalculadoraIngestaoAgua
     // Métodos
 
     // Calcular a quantidade de água para ingestão no dia
-    public static IngestaoAguaResponse CalcularIngestaoDiaria(Pessoa pessoa) /* Função pura */
+    public static IngestaoAguaResponse CalcularIngestaoAgua(Pessoa pessoa) /* Função pura */
     {
         // O underline "_" significa "default", ou seja, se não for nenhuma das de cima, usa o padrão de 35 ml por */ / O switch avalia a idade e retorna a quantidade de ml por kg */
         int mlPorKg = pessoa.Idade switch /* Nova forma de fazer o switch */
@@ -32,6 +38,9 @@ public static class CalculadoraIngestaoAgua
         /* Dias muito quentes: adicionar 300 a 700 mL */
         /* Gestantes: adicionar cerca de 300 mL */
         /* Lactantes: adicionar cerca de 700 mL */
+
+        /* Existe alguma forma de refinar esse cálculo com base no percentualGordura? 
+           Mais informações no comentário de IngestaoAguaRequest. Talvez tenha, precisa ser estudado */
 
 
         // Calcular quantidade de água em ml e L
