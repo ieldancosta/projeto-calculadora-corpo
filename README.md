@@ -8,6 +8,11 @@ O sistema consiste em uma calculadora de saúde avançada com rede social integr
 - **Metas de Hidratação** baseadas na faixa etária e peso corporal.
 - **Feed Social da Comunidade:** Um espaço interativo em tempo real para os usuários compartilharem resultados, dúvidas e acompanharem o progresso uns dos outros.
 
+Para a disciplina de <u>Frontend e Backend</u>, os integrantes são: Daniel Costa | Stanley Dias | Pedro Henrique | Hiago Paes<br>
+Para a disciplina de <u>Sistemas Distribuídos</u>, os integrantes são: Daniel Costa | Stanley Dias | Pedro Henrique | Hiago Paes | Eduardo Mendonça
+
+Sobre os commits serem somente de uma pessoa, isso de dá pelo modo de desenvolvimento que escolhemos: programamos juntos em tempo real utilizando da extensão Live Share no VS Code, que permite a conexão e programação em tempo real no projeto de uma pessoa. Dessa forma, ao final de cada progressão no código, realizamos o commit para o Github para salvarmos tudo no repositório
+
 ## 🏗️ Arquitetura do Projeto
 
 O projeto está estruturado no padrão *Monorepo*, operando como uma aplicação Web distribuída completa (Full-Stack). A arquitetura é dividida em:
@@ -112,6 +117,8 @@ with check ( auth.uid() = perfil_id );
 ### 2. Configurando as Variáveis de Ambiente (Frontend)
 Na pasta /frontend, crie um arquivo chamado .env na raiz da pasta e adicione as chaves de acesso fornecidas pelo seu projeto no Supabase:
 
+(Para o professor, será enviado o arquivo .env com as chaves do nosso Supabase para utilização)
+
 ```
 VITE_SUPABASE_URL=sua_url_do_projeto_aqui
 VITE_SUPABASE_ANON_KEY=sua_chave_anonima_aqui
@@ -138,3 +145,7 @@ npm run dev
 ```
 
 Acesse http://localhost:5173 no seu navegador para utilizar o sistema.
+
+---
+
+*Feito com carinho.*
