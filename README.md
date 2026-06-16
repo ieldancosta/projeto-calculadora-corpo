@@ -11,7 +11,7 @@ O sistema consiste em uma calculadora de saúde avançada com rede social integr
 Para a disciplina de <u>Frontend e Backend</u>, os integrantes são: Daniel Costa | Stanley Dias | Pedro Henrique | Hiago Paes<br>
 Para a disciplina de <u>Sistemas Distribuídos</u>, os integrantes são: Daniel Costa | Stanley Dias | Pedro Henrique | Hiago Paes | Eduardo Mendonça
 
-Sobre os commits serem somente de uma pessoa, isso de dá pelo modo de desenvolvimento que escolhemos: programamos juntos em tempo real utilizando da extensão Live Share no VS Code, que permite a conexão e programação em tempo real no projeto de uma pessoa. Dessa forma, ao final de cada progressão no código, realizamos o commit para o Github para salvarmos tudo no repositório
+Sobre os commits serem somente de uma pessoa, isso se dá pelo modo de desenvolvimento que escolhemos: programamos juntos em tempo real utilizando da extensão Live Share no VS Code, que permite a conexão e programação em tempo real no projeto de uma pessoa. Dessa forma, ao final de cada progressão no código, realizamos o commit para o Github para salvarmos tudo no repositório
 
 ## 🏗️ Arquitetura do Projeto
 
