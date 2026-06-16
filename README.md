@@ -25,6 +25,13 @@ O projeto está estruturado no padrão *Monorepo*, operando como uma aplicação
 
 Se você deseja clonar e rodar este projeto em sua máquina, siga os passos abaixo:
 
+### 0. Clonando o Repositório
+Abra o seu terminal e execute o comando abaixo para baixar o código para a sua máquina:
+```
+git clone https://github.com/ieldancosta/projeto-calculadora-corpo.git
+cd projeto-calculadora-corpo
+```
+
 ### Pré-requisitos
 Certifique-se de ter as seguintes ferramentas instaladas:
 - [Node.js](https://nodejs.org/) (Necessário para rodar o React/Vite no frontend)
@@ -112,6 +119,58 @@ using (true);
 create policy "Utilizadores podem inserir as suas próprias postagens"
 on public.postagens for insert
 with check ( auth.uid() = perfil_id );
+
+create table public.curtidas (
+  postagem_id uuid not null,
+  perfil_id uuid not null,
+  criado_em timestamp with time zone null default now(),
+  constraint curtidas_pkey primary key (postagem_id, perfil_id),
+  constraint curtidas_perfil_id_fkey foreign KEY (perfil_id) references perfis (id) on delete CASCADE,
+  constraint curtidas_postagem_id_fkey foreign KEY (postagem_id) references postagens (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+create table public.comentarios (
+  id uuid not null default gen_random_uuid (),
+  postagem_id uuid not null,
+  perfil_id uuid not null,
+  conteudo text not null,
+  criado_em timestamp with time zone null default now(),
+  constraint comentarios_pkey primary key (id),
+  constraint comentarios_perfil_id_fkey foreign KEY (perfil_id) references perfis (id) on delete CASCADE,
+  constraint comentarios_postagem_id_fkey foreign KEY (postagem_id) references postagens (id) on delete CASCADE,
+  constraint comentarios_conteudo_check check (
+    (
+      (char_length(conteudo) > 0)
+      and (char_length(conteudo) <= 300)
+    )
+  )
+) TABLESPACE pg_default;
+
+-- Segurança RLS (Row Level Security) para Curtidas
+alter table public.curtidas enable row level security;
+
+create policy "Todos podem ver curtidas"
+on public.curtidas for select 
+using (true);
+
+create policy "Usuários podem curtir" 
+on public.curtidas for insert 
+with check (auth.uid() = perfil_id);
+
+create policy "Usuários podem descurtir" 
+on public.curtidas for delete 
+using (auth.uid() = perfil_id);
+
+-- Segurança RLS (Row Level Security) para Comentários
+alter table public.comentarios enable row level security;
+
+create policy "Todos podem ver comentários" 
+on public.comentarios for select 
+using (true);
+
+create policy "Usuários podem comentar" 
+on public.comentarios for insert 
+with check (auth.uid() = perfil_id);
 ```
 
 ### 2. Configurando as Variáveis de Ambiente (Frontend)
