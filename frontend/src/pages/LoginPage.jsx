@@ -113,41 +113,11 @@ export function LoginPage() {
   };
 
 
-  // --- Estilos --- CSS
-  const containerStyle = {
-    display: 'flex', flexDirection: 'column', alignItems: 'center',
-    justifyContent: 'center', height: '100vh', fontFamily: 'Arial, sans-serif',
-    backgroundColor: '#f4f4f9'
-  };
-
-  const formStyle = {
-    backgroundColor: '#fff', padding: '30px', borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)', width: '300px', display: 'flex',
-    flexDirection: 'column', gap: '15px'
-  };
-
-  const inputStyle = {
-    width: '100%', padding: '8px', borderRadius: '4px',
-    border: '1px solid #ccc', boxSizing: 'border-box'
-  };
-
-  const buttonStyle = {
-    width: '100%', padding: '10px', backgroundColor: '#007bff',
-    color: 'white', border: 'none', borderRadius: '4px',
-    cursor: carregando ? 'not-allowed' : 'pointer', fontWeight: 'bold'
-  };
-
-  const googleButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: '#db4437', // Vermelho característico do Google
-    marginTop: '10px'
-  };
-
-
+  // Retorno para o usuário --- HTML
   // Retorno para o usuário --- HTML
   return (
-    <div style={containerStyle}>
-      <form onSubmit={handleLogin} style={formStyle}>
+    <div className="auth-container">
+      <form onSubmit={handleLogin} className="auth-form">
         <h2 style={{ textAlign: 'center', margin: '0 0 10px 0', color: '#333' }}>Entrar no Sistema</h2>
 
         <div>
@@ -157,7 +127,7 @@ export function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu e-mail"
-            style={inputStyle}
+            className="auth-input"
             disabled={carregando}
           />
         </div>
@@ -169,7 +139,7 @@ export function LoginPage() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             placeholder="Digite sua senha"
-            style={inputStyle}
+            className="auth-input"
             disabled={carregando}
           />
         </div>
@@ -180,13 +150,13 @@ export function LoginPage() {
         {/* Se não tiver erro, essa linha de código é invisível */}
         {erro && <p style={{ color: 'red', fontSize: '13px', margin: 0 }}>{erro}</p>}
 
-        <button type="submit" style={buttonStyle} disabled={carregando}>
+        <button type="submit" className="auth-button btn-primary" disabled={carregando}>
           {carregando ? 'Entrando...' : 'Acessar'}
         </button>
 
         <div style={{ textAlign: 'center', color: '#666', fontSize: '12px', margin: '5px 0' }}>ou</div>
 
-        <button type="button" onClick={handleGoogleLogin} style={googleButtonStyle}>
+        <button type="button" onClick={handleGoogleLogin} className="auth-button btn-google">
           Entrar com Google
         </button>
 
